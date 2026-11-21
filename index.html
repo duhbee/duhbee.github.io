@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trisha Tan | Real-time graphics and simulation programmer</title>
+<meta name="description" content="Portfolio of Trisha Tan, Computer Science (Real-Time Interactive Simulation) student at Singapore Institute of Technology and DigiPen. Lighting, shadows, engine tools and real-time C and C++.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#130f26;
+  --stage:#1d1838;
+  --line:#352d5e;
+  --text:#ede8ff;
+  --muted:#aca5cc;
+  --gold:#f6c453;
+  --cyan:#4fe3f0;
+  --magenta:#ff6cc4;
+  --lx:22%; --ly:18%;
+  --sx:0; --sy:0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--text);font:400 1.0625rem/1.65 "Atkinson Hyperlegible",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+img,video,iframe{display:block;max-width:100%}
+img{height:auto}
+a{color:var(--cyan);text-underline-offset:3px}
+a:hover{color:#9ff3fa}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1120px,100% - 3rem);margin-inline:auto}
+.skip{position:absolute;left:-999px;top:0;background:var(--gold);color:var(--ink);padding:.5rem 1rem;z-index:10}
+.skip:focus{left:1rem;top:1rem}
+
+/* Hero: a stage light you can move. The name casts a shadow away from it. */
+.hero{position:relative;min-height:min(92vh,860px);display:flex;align-items:center;overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(circle at var(--lx) var(--ly), rgba(246,196,83,.30) 0, rgba(246,196,83,.10) 18%, rgba(19,15,38,0) 42%),
+    linear-gradient(180deg,#191433 0%,var(--ink) 100%)}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:38%;z-index:-1;
+  background:repeating-linear-gradient(90deg,rgba(79,227,240,.07) 0 1px,transparent 1px 64px),
+             repeating-linear-gradient(0deg,rgba(79,227,240,.07) 0 1px,transparent 1px 64px);
+  transform:perspective(500px) rotateX(58deg);transform-origin:bottom;mask-image:linear-gradient(to top,#000 10%,transparent)}
+.hero-inner{padding:6rem 0 7rem}
+.name{font:800 clamp(3.6rem,13vw,10.5rem)/.88 "Bricolage Grotesque",sans-serif;letter-spacing:-.035em;margin:0;color:#fff6dc;
+  text-shadow:
+    calc(var(--sx)*1px) calc(var(--sy)*1px) 0 rgba(10,7,24,.95),
+    calc(var(--sx)*2px) calc(var(--sy)*2px) 0 rgba(10,7,24,.85),
+    calc(var(--sx)*3px) calc(var(--sy)*3px) 0 rgba(10,7,24,.70),
+    calc(var(--sx)*4px) calc(var(--sy)*4px) 0 rgba(10,7,24,.55),
+    calc(var(--sx)*6px) calc(var(--sy)*6px) 2px rgba(10,7,24,.40),
+    calc(var(--sx)*9px) calc(var(--sy)*9px) 6px rgba(10,7,24,.25)}
+.intro{max-width:38rem;margin:2rem 0 0;font-size:clamp(1.1rem,2.2vw,1.35rem);line-height:1.55;color:var(--text)}
+.intro strong{color:var(--gold);font-weight:700}
+.hero-links{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;margin-top:2.25rem;font-weight:700}
+.btn{display:inline-block;padding:.8rem 1.3rem;border-radius:999px;background:var(--gold);color:var(--ink);text-decoration:none}
+.btn:hover{background:#ffd877;color:var(--ink)}
+.hero-links a:not(.btn){padding:.8rem 0}
+.hint{position:absolute;right:1.5rem;bottom:1.25rem;font-size:.85rem;color:var(--muted)}
+
+/* Sections */
+section{padding:5.5rem 0}
+.section-title{font:700 clamp(2rem,4.5vw,3rem)/1.05 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em;margin:0 0 .75rem}
+.section-lede{color:var(--muted);max-width:40rem;margin:0 0 3rem}
+
+/* Case studies */
+.case{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:2.5rem 3.5rem;padding:3.5rem 0;border-top:1px solid var(--line)}
+.case:first-of-type{border-top:0;padding-top:1rem}
+.case h3{font:800 clamp(1.9rem,4vw,2.75rem)/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em;margin:0 0 .6rem}
+.case .what{margin:0 0 1rem;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.75rem;padding:0;list-style:none;font-size:.9rem}
+.facts li{border:1px solid var(--line);border-radius:999px;padding:.25rem .8rem;color:var(--text)}
+.story{margin:0}
+.story dt{font:700 1.02rem/1.3 "Bricolage Grotesque",sans-serif;margin-top:1.25rem}
+.story dd{margin:.3rem 0 0;max-width:36rem}
+.story dt:first-child{margin-top:0}
+.case[data-accent="gold"] .story dt{color:var(--gold)}
+.case[data-accent="cyan"] .story dt{color:var(--cyan)}
+.case[data-accent="magenta"] .story dt{color:var(--magenta)}
+.media{display:grid;gap:1rem;align-content:start}
+.media figure{margin:0}
+.media img,.media video,.frame{width:100%;border-radius:10px;border:1px solid var(--line);background:#0c0a1a}
+.media figcaption{font-size:.88rem;color:var(--muted);margin-top:.45rem}
+.media .pair{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.video{position:relative;aspect-ratio:16/9}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:10px}
+.case.flip .media{order:2}
+.case.flip .text{order:1}
+
+/* Earlier work */
+.earlier{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5rem 2rem}
+.earlier article h3{font:700 1.4rem/1.15 "Bricolage Grotesque",sans-serif;margin:1rem 0 .35rem}
+.earlier article p{margin:.35rem 0 0;color:var(--text)}
+.earlier .when{color:var(--muted);font-size:.92rem}
+.earlier img,.earlier video{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#0c0a1a}
+.earlier .tall{object-position:center 30%}
+.also{margin-top:3rem;padding:1.5rem 1.75rem;border:1px solid var(--line);border-radius:14px;background:var(--stage)}
+.also h3{font:700 1.2rem/1.2 "Bricolage Grotesque",sans-serif;margin:0 0 .4rem}
+.also p{margin:0;max-width:52rem}
+
+/* About and contact */
+.about{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:3rem}
+.about p{margin:0 0 1rem;max-width:38rem}
+.contact{padding:2rem;border-radius:16px;background:var(--stage);border:1px solid var(--line);align-self:start}
+.contact h3{font:700 1.5rem/1.15 "Bricolage Grotesque",sans-serif;margin:0 0 .5rem}
+.contact p{margin:0 0 1.25rem;color:var(--muted)}
+.contact ul{list-style:none;margin:0;padding:0;display:grid;gap:.6rem;font-weight:700}
+.email{font-size:1.15rem;color:var(--gold)}
+.email:hover{color:#ffd877}
+footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
+
+@media (max-width:860px){
+  .case,.about{grid-template-columns:1fr}
+  .case .text,.case.flip .text{order:0}
+  .case .media,.case.flip .media{order:1}
+  .earlier{grid-template-columns:1fr}
+  .hero{min-height:auto}
+  .hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#work">Skip to projects</a>
+
+<header class="hero" id="top">
+  <div class="wrap hero-inner">
+    <h1 class="name">Trisha<br>Tan</h1>
+    <p class="intro">I write the <strong>lighting, shadows and tools</strong> that make real-time games and simulations work, mostly in C and C++. I'm a third-year Computer Science student in Real-Time Interactive Simulation at the Singapore Institute of Technology and DigiPen.</p>
+    <div class="hero-links">
+      <a class="btn" href="#work">See my projects</a>
+      <a href="mailto:trishaa1302@gmail.com">trishaa1302@gmail.com</a>
+      <a href="https://www.linkedin.com/in/trishatan-chenqiaoting">LinkedIn</a>
+    </div>
+  </div>
+  <p class="hint" aria-hidden="true">Move your cursor to move the light</p>
+</header>
+
+<main>
+<section id="work">
+  <div class="wrap">
+    <h2 class="section-title">Projects</h2>
+    <p class="section-lede">Three projects in depth: what the problem was, what held us back, what broke and what I changed. The code for school projects is private, so I'm happy to walk through it on a call.</p>
+
+    <article class="case" data-accent="gold" aria-labelledby="lastact">
+      <div class="media">
+        <div class="video">
+          <iframe src="https://www.youtube-nocookie.com/embed/wYaBSyx7Sx4" title="The Last Act gameplay showcase" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="pair">
+          <figure><img src="assets/lastact-stun.webp" alt="A spotlight beam stunning an enemy while the doll stands on a platform" width="1400" height="788" loading="lazy"><figcaption>Enemies are stunned only inside the beam.</figcaption></figure>
+          <figure><img src="assets/lastact-path.webp" alt="A spotlight casting a platform's shadow across the wall to form a path" width="1400" height="788" loading="lazy"><figcaption>A light turns a platform's shadow into a path.</figcaption></figure>
+        </div>
+        <figure><img src="assets/editor-light.webp" alt="The level editor with the lighting preview switched on" width="1400" height="588" loading="lazy"><figcaption>The editor's live lighting preview, which runs the game's own lighting.</figcaption></figure>
+      </div>
+      <div class="text">
+        <h3 id="lastact">The Last Act</h3>
+        <p class="what">A 2D puzzle-platformer set in a haunted theatre, where you play as a doll and its shadow.</p>
+        <ul class="facts">
+          <li>Technical lead and graphics</li>
+          <li>8-person team</li>
+          <li>Custom C++ and OpenGL engine</li>
+          <li>Sep 2025 to Apr 2026</li>
+        </ul>
+        <dl class="story">
+          <dt>The problem</dt>
+          <dd>Light and shadow are the level. Moving a stage light changes where the shadow can walk, so the lighting had to be gameplay, not decoration.</dd>
+          <dt>The constraint</dt>
+          <dd>We wrote our own engine, so there was no lighting system to start from, and our designers needed to set up shadows without touching code.</dd>
+          <dt>What I built</dt>
+          <dd>The spotlight and shadow system, enemies that are stunned only inside the beam, and shadow movement across slopes. For the editor, I built a shadow shape tool, shadow collision editing, a live lighting preview and an animation editor.</dd>
+          <dt>What went wrong</dt>
+          <dd>My first shadows didn't sit properly on slopes. The shadow form slid and floated instead of looking like it stood on the surface.</dd>
+          <dt>What I changed</dt>
+          <dd>I reworked how the shadow collides with sloped shadows until it stayed grounded, and gave designers a shape editor so they could adjust each object's shadow by hand.</dd>
+          <dt>What happened</dt>
+          <dd>The game shipped with every puzzle built on the lighting system. I made 336 commits, the most on the team.</dd>
+        </dl>
+      </div>
+    </article>
+
+    <article class="case flip" data-accent="cyan" aria-labelledby="dds">
+      <div class="text">
+        <h3 id="dds">DDS Light Cycles</h3>
+        <p class="what">A real-time multiplayer light-cycle game. Hit a wall or any trail and you're out.</p>
+        <ul class="facts">
+          <li>Client programmer</li>
+          <li>C, OpenGL, GLFW</li>
+          <li>Low-Level Programming module</li>
+          <li>Oct to Nov 2026</li>
+        </ul>
+        <dl class="story">
+          <dt>The problem</dt>
+          <dd>Several players race on one shared 80 by 60 grid, so every player's window has to show the same game at the same moment.</dd>
+          <dt>The constraint</dt>
+          <dd>Plain C on Linux through Windows Subsystem for Linux (WSL). The server has the final say and runs at 15 ticks per second, and all networking goes through Cyclone DDS (Data Distribution Service) with security switched on.</dd>
+          <dt>What I built</dt>
+          <dd>The client: the game window and renderer, joining and rejoining a match, and a live feed of players joining and leaving.</dd>
+          <dt>What went wrong</dt>
+          <dd>On some machines the game window stayed black under WSL's graphics layer, and players couldn't get back into a match after the server restarted or filled up.</dd>
+          <dt>What I changed</dt>
+          <dd>I made the client use software OpenGL by default, added retrying when the server is full and fixed rejoining after a restart. I also redesigned the flat grid as a tilted 3D arena.</dd>
+          <dt>What happened</dt>
+          <dd>Full matches now run from countdown to podium with any mix of players and bots.</dd>
+        </dl>
+      </div>
+      <div class="media">
+        <figure><img src="assets/dds-trails.webp" alt="Three light cycles leaving glowing cyan, magenta and yellow trails in a tilted arena" width="1400" height="917" loading="lazy"><figcaption>The tilted 3D arena I built for the client.</figcaption></figure>
+        <div class="pair">
+          <figure><img src="assets/dds-countdown.webp" alt="The countdown before a round, telling the player their colour" width="1400" height="1001" loading="lazy"><figcaption>Countdown before each round.</figcaption></figure>
+          <figure><img src="assets/dds-podium.webp" alt="The end-of-match podium showing first, second and third place" width="1400" height="1001" loading="lazy"><figcaption>First to 5 round wins takes the match.</figcaption></figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="case" data-accent="magenta" aria-labelledby="varchive">
+      <div class="media">
+        <figure><img src="assets/varchive-compare.webp" alt="Two 3D scans shown side by side with linked cameras" width="1400" height="788" loading="lazy"><figcaption>Side-by-side comparison of two scans, with linked cameras.</figcaption></figure>
+        <div class="pair">
+          <figure><img src="assets/varchive-condition.webp" alt="The 3D viewer with the Condition Assessments panel" width="1400" height="972" loading="lazy"><figcaption>The Condition Assessments panel.</figcaption></figure>
+          <figure><img src="assets/varchive-upload.webp" alt="The form for adding a new capture" width="1400" height="972" loading="lazy"><figcaption>Adding a capture, with autosave.</figcaption></figure>
+        </div>
+      </div>
+      <div class="text">
+        <h3 id="varchive">VArchive</h3>
+        <p class="what">A web platform where conservators catalogue 3D scans of heritage objects and record their condition over time.</p>
+        <ul class="facts">
+          <li>Full-stack features</li>
+          <li>12-person team</li>
+          <li>React, TypeScript, Three.js, Supabase</li>
+          <li>Sep 2026 to now</li>
+        </ul>
+        <dl class="story">
+          <dt>The problem</dt>
+          <dd>Conservators need to see how an object has changed between two scans, and write down its condition in a way the whole team can trust.</dd>
+          <dt>The constraint</dt>
+          <dd>The 3D files are large, uploads happen over unreliable connections, and several people edit the same records.</dd>
+          <dt>What I built</dt>
+          <dd>Side-by-side capture comparison with linked cameras and annotation focus, the Condition Assessments panel with its storage and application programming interface (API), resumable uploads with autosave and draft recovery, safe record editing, and the team wiki.</dd>
+          <dt>What went wrong</dt>
+          <dd>New pull-request previews failed to deploy because a database migration table was missing, so reviewers couldn't try changes before they were merged.</dd>
+          <dt>What I changed</dt>
+          <dd>I fixed the preview setup so every pull request gets a working preview again, and made uploads continue from where they stopped instead of starting over.</dd>
+          <dt>What happened</dt>
+          <dd>The features are in use by the team, with Playwright browser tests covering the condition assessments in the viewer.</dd>
+        </dl>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="earlier" aria-labelledby="earlier-title">
+  <div class="wrap">
+    <h2 class="section-title" id="earlier-title">Earlier work</h2>
+    <p class="section-lede">Smaller team games from my first year, and projects from polytechnic.</p>
+    <div class="earlier">
+      <article>
+        <video class="clip" src="assets/thalassa-trailer.mp4" poster="assets/thalassa-poster.webp" muted loop playsinline preload="none" aria-label="Thalassa trailer, no sound"></video>
+        <h3>Thalassa</h3>
+        <p class="when">Underwater game in C++, 5-person team, 2025</p>
+        <p>I built the burrowing enemy and its behaviour states, plus the main menu, tutorial and game-over screens.</p>
+      </article>
+      <article>
+        <video class="clip" src="assets/inferno-trailer.mp4" poster="assets/inferno-poster.webp" muted loop playsinline preload="none" aria-label="Inferno Descend trailer, no sound"></video>
+        <h3>Inferno Descend</h3>
+        <p class="when">Boss-fight game in C, 4-person team, 2024</p>
+        <p>I built one of the first playable levels, with the pet's healing radius and a mini-boss that shoots at the player, plus the menu and end screens.</p>
+      </article>
+      <article>
+        <img src="assets/carbon-dashboard.webp" alt="Dashboard showing yearly emissions for each scope with monthly charts" width="1400" height="645" loading="lazy">
+        <h3>Carbon footprint calculator</h3>
+        <p class="when">Solo final-year project, Nanyang Polytechnic (NYP), 2023 to 2024</p>
+        <p>An Excel tool that measures a cafe's greenhouse gas emissions across 9 categories and all three scopes, with automatic emission factors and a yearly dashboard.</p>
+      </article>
+      <article>
+        <img class="tall" src="assets/hackathon.webp" alt="Trisha and her teammate holding their trophies at their hackathon booth" width="967" height="1280" loading="lazy">
+        <h3>3rd place at a hackathon run by Smart Nation, Amazon Web Services, NYP and ActiveSG</h3>
+        <p class="when">Team of 2, 2022</p>
+        <p>A touchscreen app beside gym machines with how-to videos, a heart-rate calorie tracker on an M5Stack, and a mini-game that levels up your avatar as you exercise.</p>
+      </article>
+    </div>
+    <div class="also">
+      <h3>Internship at CSE-ITS</h3>
+      <p>CSE-ITS (Customer Satisfaction Everyday – Intelligent Transport System). Three months on the Land Transport Authority's checkpoint enforcement system. I built vehicle image datasets, raising my output from below target to 1,022 samples a day, and helped train and deploy a vehicle-recognition model in PyTorch.</p>
+    </div>
+  </div>
+</section>
+
+<section id="about" aria-labelledby="about-title">
+  <div class="wrap about">
+    <div>
+      <h2 class="section-title" id="about-title">About me</h2>
+      <p>I started in electronics, with a diploma in Electronics and Computer Engineering from Nanyang Polytechnic, before moving into real-time graphics at SIT and DigiPen. These days most of my time goes into C and C++: lighting, rendering and the tools that help a team build faster.</p>
+      <p>In 2026 I spent three months at DigiPen's campus in Redmond, Washington, studying graphics, math, physics and game AI. My first project there was building behaviour trees, the logic that decides what game characters do next.</p>
+    </div>
+    <aside class="contact" aria-labelledby="contact-title">
+      <h3 id="contact-title">Looking for an internship</h3>
+      <p>Game programming, graphics, simulation or C++ software engineering, from May 2027 to April 2028 through SIT's Integrated Work Study Programme.</p>
+      <ul>
+        <li><a class="email" href="mailto:trishaa1302@gmail.com">trishaa1302@gmail.com</a></li>
+        <li><a href="https://www.linkedin.com/in/trishatan-chenqiaoting">LinkedIn</a></li>
+      </ul>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">Trisha Tan, Singapore. School project code is private and available to walk through on request.</div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement, hero=document.querySelector('.hero');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function place(px,py){
+    // px, py: light position as 0..1 of the hero. Shadow falls away from the light.
+    root.style.setProperty('--lx',(px*100).toFixed(1)+'%');
+    root.style.setProperty('--ly',(py*100).toFixed(1)+'%');
+    root.style.setProperty('--sx',((0.5-px)*6).toFixed(2));
+    root.style.setProperty('--sy',((0.5-py)*6+1.5).toFixed(2));
+  }
+  place(.22,.18);
+  if(!reduce){
+    hero.addEventListener('pointermove',function(e){
+      var r=hero.getBoundingClientRect();
+      place((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height);
+    });
+    // One opening moment: the light sweeps across the stage on load.
+    var t0=null;
+    function sweep(t){ if(!t0)t0=t; var k=Math.min((t-t0)/1600,1), e=1-Math.pow(1-k,3);
+      place(.85-.63*e,.1+.08*e); if(k<1)requestAnimationFrame(sweep); }
+    requestAnimationFrame(sweep);
+    // Trailer clips play only while on screen.
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting){en.target.play().catch(function(){});}else{en.target.pause();}
+    });},{threshold:.4});
+    document.querySelectorAll('video.clip').forEach(function(v){io.observe(v);});
+  } else {
+    document.querySelectorAll('video.clip').forEach(function(v){v.controls=true;});
+  }
+})();
+</script>
+</body>
+</html>
