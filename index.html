@@ -144,9 +144,10 @@ footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px s
 
     <article class="case" data-accent="gold" aria-labelledby="lastact">
       <div class="media">
-        <div class="video">
-          <iframe src="https://www.youtube-nocookie.com/embed/wYaBSyx7Sx4" title="The Last Act gameplay showcase" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
+        <figure>
+          <video class="clip frame" src="assets/lastact-loop.mp4" poster="assets/lastact-loop-poster.webp" muted loop playsinline preload="none" aria-label="The Last Act gameplay: moving lights to create shadow paths and stun enemies, no sound"></video>
+          <figcaption>Moving a light turns shadows into paths, and the beam stuns enemies. <a href="https://www.youtube.com/watch?v=wYaBSyx7Sx4">Watch the full showcase with sound</a></figcaption>
+        </figure>
         <div class="pair">
           <figure><img src="assets/lastact-stun.webp" alt="A spotlight beam stunning an enemy while the doll stands on a platform" width="1400" height="788" loading="lazy"><figcaption>Enemies are stunned only inside the beam.</figcaption></figure>
           <figure><img src="assets/lastact-path.webp" alt="A spotlight casting a platform's shadow across the wall to form a path" width="1400" height="788" loading="lazy"><figcaption>A light turns a platform's shadow into a path.</figcaption></figure>
@@ -205,7 +206,10 @@ footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px s
         </dl>
       </div>
       <div class="media">
-        <figure><img src="assets/dds-trails.webp" alt="Three light cycles leaving glowing cyan, magenta and yellow trails in a tilted arena" width="1400" height="917" loading="lazy"><figcaption>The tilted 3D arena I built for the client.</figcaption></figure>
+        <figure>
+          <video class="clip frame" src="assets/dds-gameplay.mp4" poster="assets/dds-gameplay-poster.webp" muted loop playsinline preload="none" aria-label="DDS Light Cycles gameplay with three players leaving glowing trails, no sound"></video>
+          <figcaption>A round from countdown to finish, in the tilted 3D arena I built for the client.</figcaption>
+        </figure>
         <div class="pair">
           <figure><img src="assets/dds-countdown.webp" alt="The countdown before a round, telling the player their colour" width="1400" height="1001" loading="lazy"><figcaption>Countdown before each round.</figcaption></figure>
           <figure><img src="assets/dds-podium.webp" alt="The end-of-match podium showing first, second and third place" width="1400" height="1001" loading="lazy"><figcaption>First to 5 round wins takes the match.</figcaption></figure>
@@ -226,7 +230,7 @@ footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px s
         <p class="what">A web platform where conservators catalogue 3D scans of heritage objects and record their condition over time.</p>
         <ul class="facts">
           <li>Full-stack features</li>
-          <li>12-person team</li>
+          <li>8-person team</li>
           <li>React, TypeScript, Three.js, Supabase</li>
           <li>Sep 2026 to now</li>
         </ul>
@@ -281,7 +285,7 @@ footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px s
     </div>
     <div class="also">
       <h3>Internship at CSE-ITS</h3>
-      <p>CSE-ITS (Customer Satisfaction Everyday – Intelligent Transport System). Three months on the Land Transport Authority's checkpoint enforcement system. I built vehicle image datasets, raising my output from below target to 1,022 samples a day, and helped train and deploy a vehicle-recognition model in PyTorch.</p>
+      <p>CSE-ITS (Customer Satisfaction Everyday – Intelligent Transport System). Twelve weeks on the Land Transport Authority's Enhanced Enforcement System at the Tuas and Woodlands checkpoints. I recorded vehicle data from camera images for analysis, going from below the 800-a-day minimum to a record 1,022 samples a day, and labelled images and ran PyTorch training for a vehicle-detection model that the team deployed.</p>
     </div>
   </div>
 </section>
